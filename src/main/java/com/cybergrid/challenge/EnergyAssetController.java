@@ -22,6 +22,16 @@ public class EnergyAssetController {
         return energyAssetService.getEnergyAsset(id);
     }
 
+    @GetMapping("/latest")
+    public EnergyAsset fetchLatestEnergyAsset() {
+        return energyAssetService.getLatestEnergyAsset();
+    }
+
+    @GetMapping("/time-period/{minutes}")
+    public List<EnergyAsset> fetchEnergyAssetsWithinTimePeriod(@PathVariable int minutes) {
+        return energyAssetService.getEnergyAssetsWithinTimePeriod(minutes);
+    }
+
     @PostMapping
     public EnergyAsset createEnergyAsset(@RequestBody EnergyAsset energyAsset) {
         return energyAssetService.postEnergyAsset(energyAsset);
