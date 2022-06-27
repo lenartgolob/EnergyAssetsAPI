@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.TimeSeries;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Data
 @Document
 @TimeSeries(collection="energyAsset", timeField = "timestamp")
-public class EnergyAsset {
+public class EnergyAsset implements Serializable {
     @Id
     private String id;
     private LocalDateTime timepoint;

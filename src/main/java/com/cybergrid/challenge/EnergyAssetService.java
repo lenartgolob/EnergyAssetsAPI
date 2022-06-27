@@ -1,6 +1,9 @@
 package com.cybergrid.challenge;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -16,6 +19,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Service
+@CacheConfig(cacheNames = {"EnergyAsset"})
 public class EnergyAssetService {
 
     private final EnergyAssetRepository energyAssetRepository;
@@ -32,7 +36,9 @@ public class EnergyAssetService {
         ));
     }
 
+    @Cacheable("latest")
     public EnergyAsset getLatestEnergyAsset() {
+        System.out.println("Getting latest energyAsset");
         Query query = new Query();
         query.with(Sort.by(Sort.Direction.DESC, "timepoint"));
         List<EnergyAsset> energyAssets = mongoTemplate.find(query, EnergyAsset.class);
@@ -53,6 +59,7 @@ public class EnergyAssetService {
         return energyAssets;
     }
 
+    @CachePut("latest")
     public EnergyAsset postEnergyAsset(EnergyAsset energyAsset) {
         energyAsset.setTimepoint(LocalDateTime.now());
         return energyAssetRepository.insert(energyAsset);
